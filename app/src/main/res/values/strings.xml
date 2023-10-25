@@ -1,3 +1,9 @@
 <resources>
-    <string name="app_name">MCO DLSU Guide App</string>
+    <string name="app_name">DLSU Guide App</string>
+    <string name="nav_open">Open Drawer</string>
+    <string name="nav_close">Close Drawer</string>
+    <string name="dl_img_contentDesc">Directory Image</string>
+    <string name="dl_name_placeholder">NAME OF PIN OF INTEREST</string>
+    <string name="dl_locatoin">Location:</string>
+    <string name="dl_tag">Tags:</string>
 </resources>
