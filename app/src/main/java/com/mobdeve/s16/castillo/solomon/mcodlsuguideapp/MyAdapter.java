@@ -1,5 +1,7 @@
 package com.mobdeve.s16.castillo.solomon.mcodlsuguideapp;
 
+import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     private Directory[] directories;
-    public MyAdapter(Directory[] data) {
+    private Context context;
+    public MyAdapter(Context context, Directory[] data) {
         this.directories = data;
+        this.context = context;
     }
     @NonNull
     @Override
@@ -26,6 +30,26 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bindData(directories[position]);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Get the clicked directory
+                Directory clickedDirectory = directories[position];
+
+                // Create an intent to open DirectoryActivity
+                Intent intent = new Intent(context, DirectoryActivity.class);
+
+                // Pass values to DirectoryActivity
+                intent.putExtra("directoryName", clickedDirectory.getDirectoryName());
+                intent.putExtra("location", clickedDirectory.getLocation());
+                intent.putExtra("image", clickedDirectory.getImage());
+                intent.putExtra("tag", clickedDirectory.getTags());
+
+                // Start DirectoryActivity
+                context.startActivity(intent);
+            }
+        });
 
     }
 

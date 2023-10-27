@@ -31,7 +31,7 @@ public class DirectoryListFragment extends Fragment {
         Directory[] directories = DataHelper.initializeData();
 
         // Initialize and set the adapter
-        adapter = new MyAdapter(directories);
+        adapter = new MyAdapter(getContext(), directories);
         recyclerView.setAdapter(adapter);
 
         return view;
