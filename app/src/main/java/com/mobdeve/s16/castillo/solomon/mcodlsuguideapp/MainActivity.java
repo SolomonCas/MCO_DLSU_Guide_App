@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
                 setFragment(directoryListFragment);
                 return true;
             } else if (id == R.id.nav_logout) {
-                Toast.makeText(MainActivity.this,"TODO: LOGOUT", Toast.LENGTH_SHORT).show();
+                finish();
                 return true;
             }
             return false;
