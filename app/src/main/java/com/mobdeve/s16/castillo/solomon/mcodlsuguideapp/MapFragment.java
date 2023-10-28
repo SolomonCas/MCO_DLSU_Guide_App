@@ -22,14 +22,13 @@ public class MapFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_map, container, false);
         MapView map = rootView.findViewById(R.id.mapView);
 
-        // Configure the map settings
         Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(getContext()));
 
-        // Set the initial map position to DLSU Manila
         IMapController mapController = map.getController();
-        GeoPoint startPoint = new GeoPoint(14.5648, 120.9932); // DLSU Manila coordinates
+        GeoPoint startPoint = new GeoPoint(14.5648, 120.9932);
         mapController.setCenter(startPoint);
-        mapController.setZoom(17); // Zoom level, adjust as needed
+        mapController.setZoom(17);
+        map.setMultiTouchControls(true);
 
         return rootView;
     }
