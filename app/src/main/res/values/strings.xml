@@ -1,3 +1,37 @@
 <resources>
-    <string name="app_name">MCO DLSU Guide App</string>
+    <string name="app_name">DLSU Guide App</string>
+    <string name="app_logo">DLSU Guide App logo</string>
+    <!-- LoginActivity & RegisterActivity Strings -->
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="signup">Sign Up</string>
+    <string name="btn_register">Register New Account</string>
+    <string name="btn_login">Login</string>
+    <string name="enter_id_no">Enter ID</string>
+    <string name="hint_id_no">ID Number</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="hint_username">Username</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="hint_password">Password</string>
+    <string name="enter_confirm_password">Re-enter Password</string>
+    <string name="hint_confirm_password">Confirm Password</string>
+    <string name="enter_dlsu_email">Enter DLSU email</string>
+    <string name="hint_dlsu_email">DLSU email</string>
+    <string name="login_text">Already have an Account?</string>
+    <string name="login_here">Login here</string>
+
+    <!-- DirectoryActivity and DirectoryListFragment Strings -->
+    <string name="dl_img_contentDesc">Directory Image</string>
+    <string name="dl_name_placeholder">NAME OF PIN OF INTEREST</string>
+    <string name="dl_location">Location:</string>
+    <string name="dl_tag">Tag:</string>
+    <string name="directory_total_rate_placeholder">RATE</string>
+    <string name="directory_location_contentDesc">Location Icon</string>
+    <string name="directory_review_title">Reviews</string>
+    <string name="directory_rate_contentDesc">Rate Icon</string>
+    <string name="directory_rate_title">Rate and review</string>
+    <string name="more_reviews">MORE REVIEWS</string>
+    <string name="directory_reviewer_placeholder">NAME OF USER</string>
+
+
 </resources>
