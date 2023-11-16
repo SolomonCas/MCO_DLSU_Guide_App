@@ -46,5 +46,6 @@ public class DirectoryActivity extends AppCompatActivity {
                 tvDirectoryLocation.setText(location);
             }
         }
+
     }
 }
