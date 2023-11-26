@@ -11,6 +11,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     private Directory[] directories;
     private Context context;
@@ -40,11 +41,16 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                 // Create an intent to open DirectoryActivity
                 Intent intent = new Intent(context, DirectoryActivity.class);
 
+
                 // Pass values to DirectoryActivity
                 intent.putExtra("directoryName", clickedDirectory.getDirectoryName());
                 intent.putExtra("location", clickedDirectory.getLocation());
                 intent.putExtra("image", clickedDirectory.getImage());
-                intent.putExtra("tag", clickedDirectory.getTags());
+                intent.putExtra("tag", clickedDirectory.getTag());
+                if(clickedDirectory.getReviews().size() > 0){
+                    intent.putParcelableArrayListExtra("reviews", clickedDirectory.getReviews());
+                }
+
 
                 // Start DirectoryActivity
                 context.startActivity(intent);
@@ -77,7 +83,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
             this.tv_dl_name.setText(directory.getDirectoryName());
             this.tv_dl_location.setText("Location: " + directory.getLocation());
             this.iv_dl_photo.setImageResource(directory.getImage());
-            this.tv_dl_tags.setText("Tag: " + directory.getTags());
+            this.tv_dl_tags.setText("Tag: " + directory.getTag());
         }
     }
 }

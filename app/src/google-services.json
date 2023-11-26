@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "761701773846",
+    "project_id": "mco-dlsu-guide-app-7b977",
+    "storage_bucket": "mco-dlsu-guide-app-7b977.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:761701773846:android:ca70de61dcec75673c7b37",
+        "android_client_info": {
+          "package_name": "com.mobdeve.s16.castillo.solomon.mcodlsuguideapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAgHuHu_ZeONdGqCQX4Ht0DFQRVXEk8UaA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

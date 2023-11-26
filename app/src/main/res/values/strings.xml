@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">DLSU Guide App</string>
     <string name="app_logo">DLSU Guide App logo</string>
+
+    <string name="back_button">Back Button</string>
+
     <!-- LoginActivity & RegisterActivity Strings -->
     <string name="login">Login</string>
     <string name="register">Register</string>
@@ -25,13 +28,19 @@
     <string name="dl_name_placeholder">NAME OF PIN OF INTEREST</string>
     <string name="dl_location">Location:</string>
     <string name="dl_tag">Tag:</string>
-    <string name="directory_total_rate_placeholder">RATE</string>
+    <string name="directory_total_rate">Rate: </string>
     <string name="directory_location_contentDesc">Location Icon</string>
     <string name="directory_review_title">Reviews</string>
     <string name="directory_rate_contentDesc">Rate Icon</string>
     <string name="directory_rate_title">Rate and review</string>
     <string name="more_reviews">MORE REVIEWS</string>
-    <string name="directory_reviewer_placeholder">NAME OF USER</string>
+    <string name="reviewer_placeholder">NAME OF USER</string>
+    <string name="default_rate">0.0</string>
 
+    <!-- ReviewActivity Strings -->
+    <string name="review_image">Review Image</string>
+    <string name="review_rate">Rate: </string>
+    <string name="review_content_placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lacinia, risus eget lobortis volutpat, justo risus sodales eros, nec aliquam neque ante nec nulla. Nullam pretium tempus massa, non consequat tellus tristique nec. Phasellus ligula quam, scelerisque in diam placerat, dignissim tincidunt magna. Nunc quis augue elit. Nunc vestibulum pellentesque auctor. Duis porttitor commodo pharetra. Maecenas quis augue felis. Vestibulum vel lacus sagittis nisi pellentesque tincidunt. Cras tempus eget tortor eu fermentum. Nam fringilla rhoncus felis. Fusce faucibus diam non leo cursus, et lobortis nunc placerat. Morbi et malesuada ex. Sed eu gravida sem.</string>
+    <string name="review_date_placeholder">January 1, 2023</string>
 
 </resources>
