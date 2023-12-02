@@ -12,7 +12,7 @@
         android:id="@+id/ll_header"
         android:layout_width="match_parent"
         android:layout_height="85dp"
-        android:background="@color/color">
+        android:background="@color/color1">
 
         <ImageButton
             android:id="@+id/ib_back_btn"
@@ -73,6 +73,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="20dp"
                         android:text="@string/dl_name_placeholder"
+                        android:textAllCaps="true"
                         android:textColor="@color/color5"
                         android:textSize="20sp"
                         android:textStyle="bold" />

@@ -25,7 +25,7 @@
 
     <!-- DirectoryActivity and DirectoryListFragment Strings -->
     <string name="dl_img_contentDesc">Directory Image</string>
-    <string name="dl_name_placeholder">NAME OF PIN OF INTEREST</string>
+    <string name="dl_name_placeholder">Name of POI</string>
     <string name="dl_location">Location:</string>
     <string name="dl_tag">Tag:</string>
     <string name="directory_total_rate">Rate: </string>
@@ -42,5 +42,24 @@
     <string name="review_rate">Rate: </string>
     <string name="review_content_placeholder">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris lacinia, risus eget lobortis volutpat, justo risus sodales eros, nec aliquam neque ante nec nulla. Nullam pretium tempus massa, non consequat tellus tristique nec. Phasellus ligula quam, scelerisque in diam placerat, dignissim tincidunt magna. Nunc quis augue elit. Nunc vestibulum pellentesque auctor. Duis porttitor commodo pharetra. Maecenas quis augue felis. Vestibulum vel lacus sagittis nisi pellentesque tincidunt. Cras tempus eget tortor eu fermentum. Nam fringilla rhoncus felis. Fusce faucibus diam non leo cursus, et lobortis nunc placerat. Morbi et malesuada ex. Sed eu gravida sem.</string>
     <string name="review_date_placeholder">January 1, 2023</string>
+    <string name="mapbox_access_token">pk.eyJ1Ijoic29sb21vbi1jYXN0aWxsbyIsImEiOiJjbG94dXQ1cTUwMDRxMmpyNmhxMWIyejlsIn0.CnjXH0u5RInYXgO9YUcIVA</string>
 
+    <!-- AddMarkerActivity Strings -->
+    <string name="select_image">select image</string>
+    <string name="add_marker">Add Marker</string>
+    <string name="am_name">Name: </string>
+    <string name="hint_address">Address</string>
+    <string-array name="amenity_array">
+        <item>Fast-Food Restaurant</item>
+        <item>Food Stall</item>
+        <item>Entertainment</item>
+        <item>Printing Service</item>
+        <item>ATM</item>
+        <item>Trash Bin</item>
+        <item>Landmark</item>
+    </string-array>
+    <string name="btn_add">Add</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <string name="recenter">Recenter map</string>
 </resources>

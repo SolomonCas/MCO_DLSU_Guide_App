@@ -8,17 +8,21 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class DirectoryReviewAdapter extends RecyclerView.Adapter<DirectoryReviewAdapter.ViewHolder>{
 
-    private ArrayList<Review> reviews;
-    private User[] users;
+    private ArrayList<DocumentReference> reviews;
 
-
-    public DirectoryReviewAdapter(ArrayList<Review> reviews, User[] users) {
+    public DirectoryReviewAdapter(ArrayList<DocumentReference> reviews) {
         this.reviews = reviews;
-        this.users = users;
+
     }
 
     @NonNull
@@ -30,14 +34,17 @@ public class DirectoryReviewAdapter extends RecyclerView.Adapter<DirectoryReview
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = new User("unkownuser", "", "", 0);
-        // Search for the User
-        for(User i : users){
-            if(i.getUserID().equals(reviews.get(position).getUserID())){
-                user = i;
-            }
-        }
-        holder.bindData(reviews.get(position), user);
+        DocumentReference reviewRef =
+                MyFirestoreReferences.getReviewDocumentReference(this.reviews.get(position).getId());
+        Tasks.whenAllSuccess(reviewRef.get())
+                .addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+                    @Override
+                    public void onSuccess(List<Object> list) {
+                        holder.bindData(
+                                ((DocumentSnapshot) list.get(0)).toObject(Review.class)
+                        );
+                    }
+                });
     }
 
     @Override
@@ -54,9 +61,23 @@ public class DirectoryReviewAdapter extends RecyclerView.Adapter<DirectoryReview
             this.tv_directory_review_user = itemView.findViewById(R.id.tv_directory_review_user);
             this.tv_directory_review_text = itemView.findViewById(R.id.tv_directory_review_text);
         }
-        public void bindData(Review review, User user){
-            this.tv_directory_review_user.setText(user.getUsername());
+        public void bindData(Review review){
             this.tv_directory_review_text.setText(review.getReviewContent());
+            DocumentReference userRef =
+                    MyFirestoreReferences.getUserDocumentReference(review.getUserRef().getId());
+            Tasks.whenAllSuccess(userRef.get())
+                    .addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+                        @Override
+                        public void onSuccess(List<Object> list) {
+                            setUsername(
+                                    ((DocumentSnapshot) list.get(0)).toObject(User.class)
+                            );
+                        }
+                    });
+        }
+        private void setUsername(User user){
+
+            this.tv_directory_review_user.setText(user.getUsername());
         }
     }
 

@@ -1,6 +1,7 @@
 package com.mobdeve.s16.castillo.solomon.mcodlsuguideapp;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +12,22 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder>{
 
-    private ArrayList<Review> reviews;
-    private User[] users;
+    private ArrayList<DocumentReference> reviews;
 
-    public ReviewAdapter(ArrayList<Review> reviews, User[] users){
+        public ReviewAdapter(ArrayList<DocumentReference> reviews){
         this.reviews = reviews;
-        this.users = users;
     }
 
     @NonNull
@@ -34,14 +39,17 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        User user = new User("unkownuser", "", "", 0);
-        // Search for the User
-        for(User i : users){
-            if(i.getUserID().equals(reviews.get(position).getUserID())){
-                user = i;
-            }
-        }
-        holder.bindData(reviews.get(position), user);
+        DocumentReference reviewRef =
+                MyFirestoreReferences.getReviewDocumentReference(this.reviews.get(position).getId());
+        Tasks.whenAllSuccess(reviewRef.get())
+                .addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+                    @Override
+                    public void onSuccess(List<Object> list) {
+                        holder.bindData(
+                                ((DocumentSnapshot) list.get(0)).toObject(Review.class)
+                        );
+                    }
+                });
     }
 
     @Override
@@ -56,6 +64,8 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
         private RatingBar rb_reviewer_rate;
         private TextView tv_review_content;
         private TextView tv_review_date;
+
+
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
@@ -66,16 +76,31 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ViewHolder
             this.tv_review_date = itemView.findViewById(R.id.tv_review_date);
         }
 
-        public void bindData(Review review, User user){
-            this.tv_review_user.setText(user.getUsername());
+        public void bindData(Review review){
+            Log.d("Bind Data", review.getImageUri());
             this.rb_reviewer_rate.setRating(review.getRate());
-            if(review.getImageUri() != null){
-                this.iv_review_image.setImageResource(review.getImageUri());
+            if(review.getImageUri() != null && !review.getImageUri().equals("")){
+                MyFirestoreReferences.downloadImageIntoReviewImageView(review, this.iv_review_image);
             }
             this.tv_review_content.setText(review.getReviewContent());
             SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.ENGLISH);
             String formattedDate = dateFormat.format(review.getDate());
             this.tv_review_date.setText(formattedDate);
+            DocumentReference userRef =
+                    MyFirestoreReferences.getUserDocumentReference(review.getUserRef().getId());
+            Tasks.whenAllSuccess(userRef.get())
+                    .addOnSuccessListener(new OnSuccessListener<List<Object>>() {
+                        @Override
+                        public void onSuccess(List<Object> list) {
+                            setUsername(
+                                    ((DocumentSnapshot) list.get(0)).toObject(User.class)
+                            );
+                        }
+                    });
+        }
+        private void setUsername(User user){
+
+            this.tv_review_user.setText(user.getUsername());
         }
     }
 }

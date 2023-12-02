@@ -12,11 +12,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import java.util.ArrayList;
+
+
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
-    private Directory[] directories;
+    private ArrayList<Directory> directories;
     private Context context;
-    public MyAdapter(Context context, Directory[] data) {
-        this.directories = data;
+    public MyAdapter(Context context) {
+        this.directories = new ArrayList<>();
         this.context = context;
     }
     @NonNull
@@ -30,27 +33,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bindData(directories[position]);
+        holder.bindData(directories.get(position));
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Get the clicked directory
-                Directory clickedDirectory = directories[position];
+                Directory clickedDirectory = directories.get(position);
 
                 // Create an intent to open DirectoryActivity
                 Intent intent = new Intent(context, DirectoryActivity.class);
 
-
-                // Pass values to DirectoryActivity
-                intent.putExtra("directoryName", clickedDirectory.getDirectoryName());
-                intent.putExtra("location", clickedDirectory.getLocation());
-                intent.putExtra("image", clickedDirectory.getImage());
-                intent.putExtra("tag", clickedDirectory.getTag());
-                if(clickedDirectory.getReviews().size() > 0){
-                    intent.putParcelableArrayListExtra("reviews", clickedDirectory.getReviews());
-                }
-
+                intent.putExtra(IntentKeys.DIRECTORY_ID_KEY.name(), clickedDirectory.getDirectoryRef().getId());
 
                 // Start DirectoryActivity
                 context.startActivity(intent);
@@ -59,9 +53,13 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
     }
 
+    public void setData(ArrayList<Directory> directories) {
+        this.directories = directories;
+    }
+
     @Override
     public int getItemCount() {
-        return directories.length;
+        return directories.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
@@ -82,7 +80,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
         public void bindData(Directory directory){
             this.tv_dl_name.setText(directory.getDirectoryName());
             this.tv_dl_location.setText("Location: " + directory.getLocation());
-            this.iv_dl_photo.setImageResource(directory.getImage());
+//            Picasso.get().load(directory.getImage()).into(this.iv_dl_photo);
+            MyFirestoreReferences.downloadImageIntoImageView(directory, this.iv_dl_photo);
             this.tv_dl_tags.setText("Tag: " + directory.getTag());
         }
     }
