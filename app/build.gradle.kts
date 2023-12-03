@@ -41,7 +41,7 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-storage")
     implementation ("com.mapbox.maps:android:10.16.2")
-    implementation ("com.squareup.picasso:picasso:2.71828")
+    implementation ("com.squareup.picasso:picasso:2.8")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

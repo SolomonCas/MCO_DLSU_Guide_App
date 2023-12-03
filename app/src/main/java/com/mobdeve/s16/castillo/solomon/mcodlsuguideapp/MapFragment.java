@@ -19,6 +19,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.mapbox.geojson.Point;
 import com.mapbox.maps.CameraOptions;
 import com.mapbox.maps.MapView;
@@ -45,6 +48,7 @@ public class MapFragment extends Fragment implements OnMapLongClickListener, OnP
     View rootView;
     ImageButton iv_recenter;
     AnnotationPlugin annotationPlugin;
+    PointAnnotationManager pointAnnotationManager;
 
     CameraOptions recenter = new CameraOptions.Builder()
             .center(
@@ -54,27 +58,6 @@ public class MapFragment extends Fragment implements OnMapLongClickListener, OnP
             )
             .zoom(17.0)
             .build();
-//    ActivityResultLauncher<Intent> myActivityResultLauncher = registerForActivityResult(
-//            new ActivityResultContracts.StartActivityForResult(),
-//            new ActivityResultCallback<ActivityResult>() {
-//                @Override
-//                public void onActivityResult(ActivityResult result) {
-//                    if (result.getResultCode() == Activity.RESULT_OK){
-//                        if (result.getData() != null){
-//                            Directory data = new Directory(
-//                                    result.getData().getStringExtra("name"),
-//                                    (Point) result.getData().getSerializableExtra("point"),
-//                                    result.getData().getStringExtra("location"),
-//                                    result.getData().getParcelableExtra("imageUri").toString(),
-//                                    result.getData().getStringExtra("tag")
-//                            );
-//                            // Add the point on the map
-//                            addPointOnMap(data);
-//                        }
-//                    }
-//                }
-//            }
-//    );
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -84,7 +67,7 @@ public class MapFragment extends Fragment implements OnMapLongClickListener, OnP
         this.iv_recenter = this.rootView.findViewById(R.id.recenter);
         this.mapView.getMapboxMap().loadStyleUri(Style.LIGHT);
         this.gesturesPlugin = GesturesUtils.getGestures(this.mapView);
-        this.gesturesPlugin.addOnMapLongClickListener(this::onMapLongClick);
+        this.gesturesPlugin.addOnMapLongClickListener(this);
 
         this.iv_recenter.setOnClickListener(v -> {
             this.mapView.getMapboxMap().setCamera(this.recenter);
@@ -92,7 +75,7 @@ public class MapFragment extends Fragment implements OnMapLongClickListener, OnP
         });
 
         this.annotationPlugin = AnnotationPluginImplKt.getAnnotations(this.mapView);
-        updateDataAndAdapter();
+        this.pointAnnotationManager = PointAnnotationManagerKt.createPointAnnotationManager(this.annotationPlugin, new AnnotationConfig());
         return rootView;
     }
 
@@ -101,69 +84,111 @@ public class MapFragment extends Fragment implements OnMapLongClickListener, OnP
         Intent addMarkerIntent = new Intent(getActivity(), AddMarkerActivity.class);
         addMarkerIntent.putExtra("point", point);
         startActivity(addMarkerIntent);
-//        this.myActivityResultLauncher.launch(addMarkerIntent);
         return true;
     }
 
     private void addPointOnMap(Directory directory) {
         // Your existing logic from MainActivity for adding points on the map
         // Ensure you have necessary dependencies and imports in the Fragment
-        PointAnnotationManager pointAnnotationManager = PointAnnotationManagerKt.createPointAnnotationManager(this.annotationPlugin, new AnnotationConfig());
+
         int icon = R.drawable.ic_landmark;
-        if(directory.getTag().equals("Fast-Food Restaurant")){
-            icon = R.drawable.ic_fast_food;
+        switch (directory.getTag()) {
+            case "Fast-Food Restaurant":
+                icon = R.drawable.ic_fast_food;
+                break;
+            case "Food Stall":
+                icon = R.drawable.ic_food_stall;
+                break;
+            case "Printing Service":
+                icon = R.drawable.ic_printer;
+                break;
+            case "ATM":
+                icon = R.drawable.ic_atm;
+                break;
+            case "Trash Bin":
+                icon = R.drawable.ic_trash_bins;
+                break;
+            case "Entertainment":
+                icon = R.drawable.ic_entertainment;
+                break;
         }
-        else if(directory.getTag().equals("Food Stall")){
-            icon = R.drawable.ic_food_stall;
-        }
-        else if(directory.getTag().equals("Printing Service")){
-            icon = R.drawable.ic_printer;
-        }
-        else if (directory.getTag().equals("ATM")) {
-            icon = R.drawable.ic_atm;
-        }
-        else if (directory.getTag().equals("Trash Bin")) {
-            icon = R.drawable.ic_trash_bins;
-        }
-        else if (directory.getTag().equals("Entertainment")) {
-            icon = R.drawable.ic_entertainment;
-        }
+
+        JsonObject directoryJson = new JsonObject();
+        directoryJson.addProperty("directoryRef", directory.getDirectoryRef().getId());
+        directoryJson.addProperty("name", directory.getDirectoryName());
+        directoryJson.addProperty("location", directory.getLocation());
+
+        JsonObject pointJson = new JsonObject();
+        pointJson.addProperty("longitude", directory.getPoint().getLongitude());
+        pointJson.addProperty("latitude", directory.getPoint().getLatitude());
+
+        directoryJson.add("point", pointJson);
+
+        JsonElement directoryData = new Gson().toJsonTree(directoryJson);
+
         PointAnnotationOptions pointAnnotationOptions = new PointAnnotationOptions()
                 .withPoint(Point.fromLngLat(directory.getPoint().getLongitude(), directory.getPoint().getLatitude()))
                 .withTextField(directory.getDirectoryName())
                 .withTextLineHeight(2.5)
                 .withTextAnchor(TextAnchor.TOP)
+                .withData(directoryData)
                 .withIconImage(BitmapFactory.decodeResource(getResources(), icon));
         pointAnnotationManager.create(pointAnnotationOptions);
-//        pointAnnotationManager.addClickListener(this :: onAnnotationClick);
-//        Log.d("Add Point On Map", String.valueOf(pointAnnotationManager.getAnnotations().size()));
+        pointAnnotationManager.addClickListener(this);
+        Log.d("PointAnnotationManager", String.valueOf(this.pointAnnotationManager.getAnnotations().size()));
     }
 
     @Override
     public boolean onAnnotationClick(@NonNull PointAnnotation pointAnnotation) {
-        Log.d("onAnnotationClick", pointAnnotation.getTextField());
-        Toast.makeText(getActivity(), "onAnnotationClick", Toast.LENGTH_LONG).show();
+        if(!pointAnnotation.isDraggable()){
+            Toast.makeText(this.rootView.getContext(), "You can drag the point", Toast.LENGTH_LONG).show();
+            pointAnnotation.setDraggable(true);
+        }
+        else{
+            pointAnnotation.setDraggable(false);
+            JsonElement currentPoint = pointAnnotation.getData();
+            if (currentPoint != null && currentPoint.isJsonObject()) {
+                JsonObject annotationData = currentPoint.getAsJsonObject();
+
+                // Extract the directoryRef value
+                if (annotationData.has("directoryRef")) {
+                    String directoryRefString = annotationData.get("directoryRef").getAsString();
+                    Intent editMarkerIntent = new Intent(getActivity(), EditMarkerActivity.class);
+
+                    Log.d("onAnnotationClick", annotationData.toString());
+                    Log.d("onAnnotationClick", pointAnnotation.getPoint().toString());
+
+                    editMarkerIntent.putExtra("point", pointAnnotation.getPoint());
+                    editMarkerIntent.putExtra("directoryRef", directoryRefString);
+                    startActivity(editMarkerIntent);
+                }
+            }
+        }
+
+
         return true;
     }
     @Override
     public void onStart(){
         super.onStart();
-        updateDataAndAdapter();
+        this.pointAnnotationManager.deleteAll();
+        updateDataAndPoint();
     }
 
-    private void updateDataAndAdapter() {
+
+    private void updateDataAndPoint() {
         MyFirestoreReferences.getDirectoryCollectionReference()
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(Task<QuerySnapshot> task) {
-                        if(task.isSuccessful()) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
                             ArrayList<Directory> directories = new ArrayList<>();
-                            for (QueryDocumentSnapshot document : task.getResult()){
+                            for (QueryDocumentSnapshot document : task.getResult()) {
                                 directories.add(document.toObject(Directory.class));
                             }
 
-                            for(Directory directory : directories){
+                            for (Directory directory : directories) {
                                 addPointOnMap(directory);
                             }
 

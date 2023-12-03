@@ -101,7 +101,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/ll_register_id_number_layout"
+            android:id="@+id/ll_am_location_layout"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_marginTop="10dp"

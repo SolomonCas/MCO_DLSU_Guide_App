@@ -9,7 +9,7 @@
     tools:context=".DirectoryActivity">
 
     <LinearLayout
-        android:id="@+id/ll_header"
+        android:id="@+id/ll_am_header"
         android:layout_width="match_parent"
         android:layout_height="85dp"
         android:background="@color/color1">
@@ -46,8 +46,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:contentDescription="@string/dl_img_contentDesc"
-                    android:scaleType="centerCrop"
-                    app:srcCompat="@drawable/image1" />
+                    android:scaleType="centerCrop" />
             </FrameLayout>
 
             <LinearLayout

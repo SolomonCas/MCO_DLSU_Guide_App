@@ -20,20 +20,12 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.GeoPoint;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.mapbox.geojson.Point;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
 
 public class AddMarkerActivity extends AppCompatActivity {
 
@@ -94,58 +86,47 @@ public class AddMarkerActivity extends AppCompatActivity {
             finish();
         });
         this.btn_am_add.setOnClickListener(v -> {
-            if(!checkIfFields()){
-                Log.d("Add Item", this.et_am_location_value.getText().toString() +
-                        ", " + this.et_am_name_val.getText().toString() + ", " + this.imageUri +
-                        ", " + this.spn_tag_value.getSelectedItem().toString());
+            if (!checkIfFields()) {
                 progressDialog = new ProgressDialog(AddMarkerActivity.this);
                 progressDialog.setTitle("Uploading");
                 progressDialog.show();
+
                 Directory directory = new Directory(
                         this.et_am_name_val.getText().toString(),
                         this.et_am_location_value.getText().toString(),
-                        new GeoPoint(point.latitude(),point.longitude()),
-                        this.imageUri.toString(),
+                        new GeoPoint(point.latitude(), point.longitude()),
+                        this.imageUri.toString(), // Initially, leave the imageUri blank
                         this.spn_tag_value.getSelectedItem().toString()
                 );
-                StorageReference imageRef = MyFirestoreReferences.getStorageReferenceInstance()
-                        .child(MyFirestoreReferences.generateNewImagePath(directory, imageUri));
+
                 CollectionReference directoryRef = MyFirestoreReferences.getDirectoryCollectionReference();
 
-                Task<UploadTask.TaskSnapshot> t1 = imageRef.putFile(imageUri)
-                        .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                            @Override
-                            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                                double progress = (100.0 * taskSnapshot.getBytesTransferred()) / taskSnapshot.getTotalByteCount();
-                                progressDialog.setCanceledOnTouchOutside(false);
-                                progressDialog.setMessage("Uploaded  " + (int) progress + "%");
-                            }
-                        });
-                Task<DocumentReference> t2 = directoryRef.add(directory);
-                Tasks.whenAllSuccess(t1, t2)
-                        .addOnSuccessListener(new OnSuccessListener<List<Object>>() {
-                            @Override
-                            public void onSuccess(List<Object> objects) {
-                                progressDialog.setCanceledOnTouchOutside(true);
-                                progressDialog.setMessage("Success!");
 
-                                // If both tasks are successful, we finish this activity and return
-                                // to the ImageStreamActivity
-                                finish();
-                            }
+                directoryRef.add(directory)
+                        .addOnSuccessListener(documentReference -> {
+                            String imagePath = MyFirestoreReferences.generateNewImagePath(documentReference, imageUri);
+                            StorageReference imageRef = MyFirestoreReferences.getStorageReferenceInstance()
+                                    .child(imagePath);
+
+                            imageRef.putFile(imageUri)
+                                    .addOnSuccessListener(taskSnapshot -> {
+                                        // Update the Directory document in Firestore with the image URL
+                                        progressDialog.dismiss();
+                                        Toast.makeText(AddMarkerActivity.this, "Directory added successfully", Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    })
+                                    .addOnFailureListener(e -> {
+                                        progressDialog.dismiss();
+                                        Toast.makeText(AddMarkerActivity.this, "Failed to upload image", Toast.LENGTH_SHORT).show();
+                                    });
                         })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(Exception e) {
-                                progressDialog.setCanceledOnTouchOutside(true);
-                                progressDialog.setMessage("Error occurred. Please try again.");
-                            }
+                        .addOnFailureListener(e -> {
+                            progressDialog.dismiss();
+                            Toast.makeText(AddMarkerActivity.this, "Failed to add directory", Toast.LENGTH_SHORT).show();
                         });
-            }
-            else {
+            } else {
                 Toast.makeText(this, "Fill All Fields", Toast.LENGTH_LONG).show();
             }
-
         });
         this.ib_am_back_btn.setOnClickListener(v -> {
             finish();
@@ -157,6 +138,8 @@ public class AddMarkerActivity extends AppCompatActivity {
             myActivityResultLauncher.launch(Intent.createChooser(i, "Select Picture"));
         });
     }
+
+
 
     private boolean checkIfFields(){
         return (this.imageUri == null ||

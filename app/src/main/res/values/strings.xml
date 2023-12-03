@@ -2,7 +2,7 @@
     <string name="app_name">DLSU Guide App</string>
     <string name="app_logo">DLSU Guide App logo</string>
 
-    <string name="back_button">Back Button</string>
+    <string name="back_button">Back</string>
 
     <!-- LoginActivity & RegisterActivity Strings -->
     <string name="login">Login</string>
@@ -60,6 +60,11 @@
     </string-array>
     <string name="btn_add">Add</string>
     <string name="btn_cancel">Cancel</string>
+
+    <!-- EditMarkerActivity Strings -->
+    <string name="btn_edit">Edit</string>
+    <string name="btn_delete">Delete</string>
+    <string name="edit_marker">Edit Marker</string>
 
     <string name="recenter">Recenter map</string>
 </resources>

@@ -57,7 +57,7 @@ public class DirectoryListFragment extends Fragment {
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()) {
                             ArrayList<Directory> directories = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()){

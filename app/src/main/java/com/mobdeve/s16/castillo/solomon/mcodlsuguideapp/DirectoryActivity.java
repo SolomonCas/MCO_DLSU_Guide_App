@@ -2,6 +2,7 @@ package com.mobdeve.s16.castillo.solomon.mcodlsuguideapp;
 
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -84,7 +85,7 @@ public class DirectoryActivity extends AppCompatActivity {
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
-                    public void onComplete(Task<QuerySnapshot> task) {
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if(task.isSuccessful()) {
                             ArrayList<Review> reviewRefs = new ArrayList<>();
                             for (QueryDocumentSnapshot document : task.getResult()){
@@ -117,11 +118,11 @@ public class DirectoryActivity extends AppCompatActivity {
                 tvDirectoryName.setText(directory.getDirectoryName());
                 tvDirectoryTag.setText(directory.getTag());
                 tvDirectoryLocation.setText(directory.getLocation());
-                if(directory.getReviews().size() > 0){
+                if(directory.getReviewsRef().size() > 0){
                     btn_more_review.setVisibility(View.VISIBLE);
-                    directoryReviewAdapter = new DirectoryReviewAdapter(directory.getReviews());
+                    directoryReviewAdapter = new DirectoryReviewAdapter(directory.getReviewsRef());
                     recyclerView.setAdapter(directoryReviewAdapter);
-                    setAverageRate(directory.getReviews());
+                    setAverageRate(directory.getReviewsRef());
                 }
 
 

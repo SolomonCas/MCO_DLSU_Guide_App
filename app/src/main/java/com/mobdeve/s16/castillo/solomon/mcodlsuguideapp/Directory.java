@@ -54,10 +54,10 @@ public class Directory {
     public void setLocation(String location){
         this.location = location;
     }
-    public String getImage() {
+    public String getImageUri() {
         return this.imageUri;
     }
-    public void setImage(String image){
+    public void setImageUri(String image){
         this.imageUri = image;
     }
     public String getTag() {
@@ -66,10 +66,10 @@ public class Directory {
     public void setTag(String tag){
         this.tag = tag;
     }
-    public ArrayList<DocumentReference> getReviews(){
+    public ArrayList<DocumentReference> getReviewsRef(){
         return reviewsRef;
     }
-    public void setReviews(ArrayList<DocumentReference> reviewsRef){
+    public void setReviewsRef(ArrayList<DocumentReference> reviewsRef){
         this.reviewsRef = reviewsRef;
     }
 

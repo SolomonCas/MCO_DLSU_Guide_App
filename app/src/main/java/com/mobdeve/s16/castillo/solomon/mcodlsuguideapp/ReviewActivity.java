@@ -50,7 +50,7 @@ public class ReviewActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(List<Object> list) {
                         directory = ((DocumentSnapshot) list.get(0)).toObject(Directory.class);
-                        ReviewAdapter reviewAdapter = new ReviewAdapter(directory.getReviews());
+                        ReviewAdapter reviewAdapter = new ReviewAdapter(directory.getReviewsRef());
                         recyclerView.setAdapter(reviewAdapter);
 
                     }
