@@ -66,5 +66,8 @@
     <string name="btn_delete">Delete</string>
     <string name="edit_marker">Edit Marker</string>
 
+    <string name="btn_submit">Submit</string>
+    <string name="rate_review_placeholder">Write your review...</string>
+
     <string name="recenter">Recenter map</string>
 </resources>

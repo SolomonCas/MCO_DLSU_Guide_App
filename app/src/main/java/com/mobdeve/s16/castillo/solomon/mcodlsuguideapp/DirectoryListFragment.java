@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,6 +26,8 @@ public class DirectoryListFragment extends Fragment {
     private SwipeRefreshLayout srl_directory_list_main;
     private RecyclerView recyclerView;
     private MyAdapter adapter;
+
+    private String userReference;
 
     @Nullable
     @Override
@@ -50,6 +53,7 @@ public class DirectoryListFragment extends Fragment {
             }
         });
 
+
         return view;
     }
     private void updateDataAndAdapter() {
@@ -64,12 +68,16 @@ public class DirectoryListFragment extends Fragment {
                                 directories.add(document.toObject(Directory.class));
                             }
 
-                            adapter.setData(directories);
+                            adapter.setData(directories, userReference);
                             adapter.notifyDataSetChanged();
 
                         }
                     }
                 });
+    }
+
+    public void setUserReference(String userRef) {
+        this.userReference = userRef;
     }
 
     @Override

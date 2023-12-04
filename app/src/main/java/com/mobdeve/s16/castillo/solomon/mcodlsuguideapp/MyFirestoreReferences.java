@@ -113,7 +113,7 @@ public class MyFirestoreReferences {
     }
 
     public static void downloadImageIntoReviewImageView(Review r, ImageView iv) {
-        String path = "reviews/" +  r.getUserRef().getId() + "-" + Uri.parse(r.getImageUri()).getLastPathSegment();
+        String path = "reviews/" +  r.getReviewRef().getId() + "-" + Uri.parse(r.getImageUri()).getLastPathSegment();
 
         getStorageReferenceInstance().child(path).getDownloadUrl()
                 .addOnCompleteListener(new OnCompleteListener<Uri>() {
@@ -129,7 +129,7 @@ public class MyFirestoreReferences {
                     }
                 });
     }
-    public static String generateNewReviewImagePath(DocumentReference userRef, Uri imageUri) {
-        return "reviews/" + userRef.getId() + "-" + imageUri.getLastPathSegment();
+    public static String generateNewReviewImagePath(DocumentReference reviewRef, Uri imageUri) {
+        return "reviews/" + reviewRef.getId() + "-" + imageUri.getLastPathSegment();
     }
 }

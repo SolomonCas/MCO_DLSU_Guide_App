@@ -10,7 +10,7 @@ import java.util.Date;
 
 public class Review {
     @DocumentId
-    private DocumentReference reviewID;
+    private DocumentReference reviewRef;
     private String reviewContent;
     private String imageUri;
     private float rate;
@@ -21,20 +21,18 @@ public class Review {
 
     }
 
-    public Review(String reviewContent, String imageUri, float rate, DocumentReference user,
-                  Date date){
+    public Review(String reviewContent, String imageUri, float rate, DocumentReference user){
         this.reviewContent = reviewContent;
         this.imageUri = imageUri;
         this.rate = rate;
         this.userRef = user;
-        this.date = date;
     }
 
-    public DocumentReference getReviewID() {
-        return this.reviewID;
+    public DocumentReference getReviewRef() {
+        return this.reviewRef;
     }
     public void setReviewID(DocumentReference reviewID) {
-        this.reviewID = reviewID;
+        this.reviewRef = reviewID;
     }
     public String getReviewContent() {
         return this.reviewContent;

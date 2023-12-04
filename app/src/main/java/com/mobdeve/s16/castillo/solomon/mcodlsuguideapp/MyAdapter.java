@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
     private ArrayList<Directory> directories;
+    private String userReference;
     private Context context;
     public MyAdapter(Context context) {
         this.directories = new ArrayList<>();
@@ -45,6 +46,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
                 Intent intent = new Intent(context, DirectoryActivity.class);
 
                 intent.putExtra(IntentKeys.DIRECTORY_ID_KEY.name(), clickedDirectory.getDirectoryRef().getId());
+                intent.putExtra(IntentKeys.USER_ID_KEY.name(), userReference);
 
                 // Start DirectoryActivity
                 context.startActivity(intent);
@@ -53,8 +55,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder>{
 
     }
 
-    public void setData(ArrayList<Directory> directories) {
+    public void setData(ArrayList<Directory> directories, String userReference) {
         this.directories = directories;
+        this.userReference = userReference;
     }
 
     @Override

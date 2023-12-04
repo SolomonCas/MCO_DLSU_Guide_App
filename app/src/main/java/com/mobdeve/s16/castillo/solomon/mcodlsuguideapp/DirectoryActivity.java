@@ -13,8 +13,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -36,8 +38,10 @@ public class DirectoryActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private ImageButton ib_back_btn;
     private RatingBar rb_average_rate;
+    private LinearLayout ll_directory_rate_layout;
     private DirectoryReviewAdapter directoryReviewAdapter;
     private String directoryIDString;
+    private String userReference;
 
 
     @Override
@@ -52,6 +56,7 @@ public class DirectoryActivity extends AppCompatActivity {
         this.tvDirectoryTag = findViewById(R.id.tv_tag_val);
         this.tvDirectoryLocation = findViewById(R.id.tv_directory_location);
         this.btn_more_review = findViewById(R.id.btn_more_review);
+        this.ll_directory_rate_layout = findViewById(R.id.ll_directory_rate_layout);
 
         this.recyclerView = findViewById(R.id.rv_directory_review_layout);
         this.ib_back_btn = findViewById(R.id.ib_back_btn);
@@ -63,13 +68,22 @@ public class DirectoryActivity extends AppCompatActivity {
         // Retrieve data from the Intent
         Intent intent = getIntent();
         if (intent != null) {
-            directoryIDString = intent.getStringExtra(IntentKeys.DIRECTORY_ID_KEY.name());
+            this.directoryIDString = intent.getStringExtra(IntentKeys.DIRECTORY_ID_KEY.name());
+            this.userReference = intent.getStringExtra(IntentKeys.USER_ID_KEY.name());
         }
 
         this.btn_more_review.setOnClickListener(v ->{
             Intent directoryIntent = new Intent(this, ReviewActivity.class);
             directoryIntent.putExtra(IntentKeys.DIRECTORY_ID_KEY.name(), directoryIDString);
             startActivity(directoryIntent);
+        });
+
+        this.ll_directory_rate_layout.setOnClickListener(v -> {
+            Intent rateReviewIntent = new Intent(this, RateAndReviewActivity.class);
+
+            rateReviewIntent.putExtra(IntentKeys.DIRECTORY_ID_KEY.name(), directoryIDString);
+            rateReviewIntent.putExtra(IntentKeys.USER_ID_KEY.name(), userReference);
+            startActivity(rateReviewIntent);
         });
 
         this.ib_back_btn.setOnClickListener(new View.OnClickListener() {
@@ -95,7 +109,7 @@ public class DirectoryActivity extends AppCompatActivity {
                             float totalRating = 0;
                             for(int i = 0; i < reviews.size(); i++){
                                 for (Review r : reviewRefs) {
-                                    if(r.getReviewID().getId().equals(reviews.get(i).getId())){
+                                    if(r.getReviewRef().getId().equals(reviews.get(i).getId())){
                                         totalRating += r.getRate();
                                     }
                                 }
