@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_review_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/color"
+    android:orientation="vertical"
+    tools:context=".ReviewActivity">
+
+    <LinearLayout
+        android:id="@+id/ll_reviews_header"
+        android:layout_width="match_parent"
+        android:layout_height="85dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/color1"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/ib_reviews_back_btn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:background="@android:color/transparent"
+            android:contentDescription="@string/back_button"
+            android:src="@drawable/ic_back" />
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_review_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

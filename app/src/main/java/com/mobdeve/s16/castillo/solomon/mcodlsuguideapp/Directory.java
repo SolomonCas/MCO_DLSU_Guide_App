@@ -1,31 +1,84 @@
 package com.mobdeve.s16.castillo.solomon.mcodlsuguideapp;
 
 
+
+import com.google.firebase.firestore.DocumentId;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.GeoPoint;
+
+import java.util.ArrayList;
+
 public class Directory {
+    @DocumentId
+    private DocumentReference directoryRef;
     private String directoryName;
     private String location;
-    private Integer image;
+    private String imageUri;
+    private GeoPoint point;
+    private ArrayList<DocumentReference> reviewsRef;
     private String tag;
 
-    public Directory(String directoryName, String location, Integer image, String tag){
+    public Directory(){
+
+    }
+    public Directory(String directoryName, String location, GeoPoint point, String image, String tag){
         this.directoryName = directoryName;
         this.location = location;
-        this.image = image;
-        this.tag = new String(tag);
+        this.point = point;
+        this.imageUri = image;
+        this.tag = tag;
+        this.reviewsRef = new ArrayList<>();
     }
 
+    public DocumentReference getDirectoryRef(){
+        return this.directoryRef;
+    }
+    public void setId(DocumentReference directoryRef){
+        this.directoryRef = directoryRef;
+    }
     public String getDirectoryName(){
         return this.directoryName;
+    }
+    public void setDirectoryName(String directoryName){
+        this.directoryName = directoryName;
+    }
+    public GeoPoint getPoint(){
+        return this.point;
+    }
+    public void setPoint(GeoPoint point){
+        this.point = point;
     }
     public String getLocation(){
         return this.location;
     }
-
-    public Integer getImage() {
-        return this.image;
+    public void setLocation(String location){
+        this.location = location;
     }
-
-    public String getTags() {
+    public String getImageUri() {
+        return this.imageUri;
+    }
+    public void setImageUri(String image){
+        this.imageUri = image;
+    }
+    public String getTag() {
         return this.tag;
     }
+    public void setTag(String tag){
+        this.tag = tag;
+    }
+    public ArrayList<DocumentReference> getReviewsRef(){
+        return reviewsRef;
+    }
+    public void setReviewsRef(ArrayList<DocumentReference> reviewsRef){
+        this.reviewsRef = reviewsRef;
+    }
+
+    public void addReview(DocumentReference review){
+        this.reviewsRef.add(review);
+    }
+    public void removeReview(DocumentReference review){
+        this.reviewsRef.remove(review);
+    }
+
+
 }
